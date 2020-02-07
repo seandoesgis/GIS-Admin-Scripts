@@ -1,0 +1,93 @@
+
+--data owner role creation
+
+CREATE ROLE biota WITH LOGIN
+  PASSWORD 'password'
+  SUPERUSER INHERIT CREATEDB CREATEROLE REPLICATION;
+  
+  
+--data user creation
+
+CREATE ROLE dvrpc_viewer WITH LOGIN
+  PASSWORD 'password'
+  NOSUPERUSER NOINHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;
+  
+  
+--permissions for data creation per user
+
+GRANT select, insert, update, delete 
+ON TABLE public.geometry_columns 
+TO biota;
+GRANT select
+ON TABLE public.spatial_ref_sys
+TO biota;
+
+
+--schema creation and permissions
+
+CREATE SCHEMA biota
+  AUTHORIZATION biota;
+GRANT USAGE ON SCHEMA biota TO dvrpc_viewer;
+GRANT USAGE ON SCHEMA biota TO dvrpcserver;
+GRANT ALL ON SCHEMA biota TO biota;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA biota TO biota;
+GRANT SELECT ON ALL TABLES IN SCHEMA biota TO dvrpc_viewer;
+GRANT SELECT ON ALL TABLES IN SCHEMA biota TO dvrpcserver;
+
+
+
+--schema tablespaces (must first create tablespace folders at C:\TableSpaces)
+DROP TABLESPACE biota; 
+CREATE TABLESPACE biota OWNER postgres LOCATION ''; 
+DROP TABLESPACE biota_index; 
+CREATE TABLESPACE biota_index OWNER postgres LOCATION '';
+
+
+GRANT CREATE ON TABLESPACE biota TO biota; 
+GRANT CREATE ON TABLESPACE biota_index TO biota;
+GRANT CREATE ON TABLESPACE sde_log TO biota; 
+GRANT CREATE ON TABLESPACE sde_log_index TO biota;
+
+
+--Keyword Sample (append to keywords, not sql)
+##BIOTA
+B_STORAGE                  "TABLESPACE biota"
+BLK_STORAGE                "TABLESPACE biota"
+BND_STORAGE                "TABLESPACE biota"
+D_STORAGE                  "TABLESPACE biota"
+GEOMETRY_STORAGE           "PG_GEOMETRY"
+RASTER_STORAGE             "RASTERBLOB"
+UI_TEXT                    "User Interface text description"
+XML_COLUMN_STORAGE         "DB_XML"
+XML_DOC_STORAGE            "TABLESPACE biota"
+XML_DOC_UNCOMPRESSED_TYPE  "BINARY"
+XML_IDX_FULLTEXT_UPDATE_METHOD "AUTOMATIC"
+XML_TS_CONFIG              "pg_catalog.english"
+XML_IDX_INDEX_ID           "WITH (FILLFACTOR = 75) TABLESPACE biota_index"
+XML_IDX_INDEX_STRING       "WITH (FILLFACTOR = 75) TABLESPACE biota_index"
+XML_IDX_INDEX_TAG          "WITH (FILLFACTOR = 75) TABLESPACE biota_index"
+BLK_INDEX_COMPOSITE        "WITH (FILLFACTOR = 75) USING INDEX TABLESPACE biota_index"
+BND_INDEX_COMPOSITE        "WITH (FILLFACTOR = 75) USING INDEX TABLESPACE biota_index"
+BND_INDEX_ID               "WITH (FILLFACTOR = 75) USING INDEX TABLESPACE biota_index"
+D_INDEX_ALL                "WITH (FILLFACTOR = 75) USING INDEX TABLESPACE biota_index"
+RAS_INDEX_ID               "WITH (FILLFACTOR = 75) USING INDEX TABLESPACE biota_index"
+XML_DOC_INDEX              "WITH (FILLFACTOR = 75) USING INDEX TABLESPACE biota_index"
+XML_IDX_INDEX_PK           "WITH (FILLFACTOR = 75) USING INDEX TABLESPACE biota_index"
+XML_IDX_STORAGE            "TABLESPACE biota"
+RAS_STORAGE                "TABLESPACE biota"
+B_INDEX_TO_DATE            "WITH (FILLFACTOR = 75) TABLESPACE biota_index"
+B_INDEX_USER               "WITH (FILLFACTOR = 75) TABLESPACE biota_index"
+B_INDEX_XML                "WITH (FILLFACTOR = 75) TABLESPACE biota_index"
+D_INDEX_DELETED_AT         "WITH (FILLFACTOR = 75) TABLESPACE biota_index"
+A_INDEX_ROWID              "WITH (FILLFACTOR = 75) USING INDEX TABLESPACE biota_index"
+XML_IDX_INDEX_DOUBLE       "WITH (FILLFACTOR = 75) TABLESPACE biota_index"
+B_INDEX_ROWID              "WITH (FILLFACTOR = 75) TABLESPACE biota_index"
+B_INDEX_RASTER             "WITH (FILLFACTOR = 75) TABLESPACE biota_index"
+A_INDEX_XML                "WITH (FILLFACTOR = 75) TABLESPACE biota_index"
+A_INDEX_USER               "WITH (FILLFACTOR = 75) TABLESPACE biota_index"
+AUX_INDEX_COMPOSITE        "TABLESPACE biota"
+A_INDEX_STATEID            "WITH (FILLFACTOR = 75) TABLESPACE biota_index"
+A_INDEX_RASTER             "WITH (FILLFACTOR = 75) TABLESPACE biota_index"
+A_STORAGE                  "TABLESPACE biota"
+AUX_STORAGE                "TABLESPACE biota"
+END
