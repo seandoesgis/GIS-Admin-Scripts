@@ -33,6 +33,7 @@ add=set(stafflist) - set(portaluserlist)
 for staff in remove:
     staffobj=gis.users.get(staff+'@DVRPC_PRIMARY')
     staffobj.delete()
+    #print(staffobj+' Deleted')
 
 for i in dataset:
     if i['ID'] in add:
@@ -40,6 +41,7 @@ for i in dataset:
         first=i['FIRSTNAME']
         last=i['LASTNAME']
         gis.users.create(username=id+'@DVRPC_PRIMARY',idp_username=id+'@DVRPC_PRIMARY', password= '', firstname =first, lastname = last, email = id+'@dvrpc.org' , role='iAAAAAAAAAAAAAAA', user_type='Viewer',provider='enterprise')
+        #print(id+'@DVRPC_PRIMARY Added')
 
 
 
